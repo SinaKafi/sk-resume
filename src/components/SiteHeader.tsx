@@ -58,6 +58,21 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
+      {/*
+        Tap-to-dismiss scrim. It sits last in paint order within the header's
+        own stacking context (`-z-10`), so it covers the page but stays under
+        the bar and the sheet — tapping anywhere else closes the menu instead of
+        leaking through to whatever button happens to be behind it.
+      */}
+      {open ? (
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          aria-label="Close menu"
+          className="fixed inset-0 -z-10 md:hidden"
+        />
+      ) : null}
+
       <div className="mx-auto w-full max-w-6xl px-3 pt-3 sm:px-5 sm:pt-5">
         <nav
           aria-label="Primary"
@@ -125,7 +140,13 @@ export function SiteHeader() {
         {open ? (
           <div
             id="mobile-nav"
-            className="glass mt-2 overflow-hidden rounded-2xl p-2 md:hidden"
+            /*
+             * `glass-nav`, not `glass`: this sheet floats over prose, and the
+             * base pane is deliberately near-transparent — the hero headline
+             * showed straight through it. It is also a sibling of the bar
+             * rather than nested inside it, so the no-glass-on-glass rule holds.
+             */
+            className="glass-nav mt-2 overflow-hidden rounded-2xl p-2 md:hidden"
           >
             <ul className="flex flex-col">
               {navItems.map((item) => (
