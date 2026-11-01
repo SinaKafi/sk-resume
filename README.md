@@ -174,7 +174,7 @@ For a **custom domain**, add the domain in Settings → Pages (GitHub writes the
 reproduce the project-site build locally:
 
 ```bash
-NEXT_PUBLIC_BASE_PATH=/sk-portfolio npm run build
+NEXT_PUBLIC_BASE_PATH=/sk-resum npm run build
 ```
 
 ### Why `trailingSlash` and `.nojekyll`
