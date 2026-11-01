@@ -1,6 +1,7 @@
 import { Icon } from "./Icon";
 import { Reveal } from "./Reveal";
 import { Section } from "./Section";
+import { TiltCard } from "./TiltCard";
 import { projects } from "@/lib/content";
 
 export function Projects() {
@@ -63,19 +64,21 @@ export function Projects() {
               delay={index * 80}
               className="group h-full"
             >
-              {project.href ? (
-                <a
-                  href={project.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="block h-full rounded-3xl"
-                  aria-label={`${project.name} — opens in a new tab`}
-                >
-                  {card}
-                </a>
-              ) : (
-                card
-              )}
+              <TiltCard className="h-full" radiusClassName="rounded-3xl">
+                {project.href ? (
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="block h-full rounded-3xl"
+                    aria-label={`${project.name} — opens in a new tab`}
+                  >
+                    {card}
+                  </a>
+                ) : (
+                  card
+                )}
+              </TiltCard>
             </Reveal>
           );
         })}

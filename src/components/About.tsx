@@ -1,6 +1,7 @@
 import { Icon } from "./Icon";
 import { Reveal } from "./Reveal";
 import { Section } from "./Section";
+import { TiltCard } from "./TiltCard";
 import { additional, profile } from "@/lib/content";
 
 const focusAreas = [
@@ -69,20 +70,26 @@ export function About() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
           {focusAreas.map((area, index) => (
             <Reveal key={area.title} delay={index * 70} className="h-full">
-              <div className="glass glass-sheen group h-full rounded-3xl p-5 transition-colors hover:bg-white/8">
-                <div className="flex items-start justify-between gap-3">
-                  <p className="text-sm font-semibold text-white">
-                    {area.title}
+              <TiltCard
+                className="h-full"
+                radiusClassName="rounded-3xl"
+                max={6}
+              >
+                <div className="glass glass-sheen group h-full rounded-3xl p-5 transition-colors hover:bg-white/8">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="text-sm font-semibold text-white">
+                      {area.title}
+                    </p>
+                    <Icon
+                      name="arrow-up-right"
+                      className="h-4 w-4 shrink-0 text-white/25 transition-colors group-hover:text-iris-300"
+                    />
+                  </div>
+                  <p className="mt-2 text-[0.85rem] leading-relaxed text-white/55">
+                    {area.body}
                   </p>
-                  <Icon
-                    name="arrow-up-right"
-                    className="h-4 w-4 shrink-0 text-white/25 transition-colors group-hover:text-iris-300"
-                  />
                 </div>
-                <p className="mt-2 text-[0.85rem] leading-relaxed text-white/55">
-                  {area.body}
-                </p>
-              </div>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

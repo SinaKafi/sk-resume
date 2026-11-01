@@ -1,8 +1,10 @@
 import { Backdrop } from "@/components/Backdrop";
 import { About } from "@/components/About";
 import { Contact, Footer } from "@/components/Contact";
+import { Cursor } from "@/components/Cursor";
 import { Experience } from "@/components/Experience";
 import { Hero } from "@/components/Hero";
+import { PhysicsField } from "@/components/PhysicsField";
 import { Projects } from "@/components/Projects";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -12,6 +14,7 @@ export default function Home() {
   return (
     <>
       <Backdrop />
+      <PhysicsField />
       <SiteHeader />
       <RevealObserver />
       <main className="flex-1">
@@ -23,6 +26,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <Cursor />
     </>
   );
 }

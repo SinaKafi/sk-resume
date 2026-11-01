@@ -51,17 +51,44 @@ database and no API at runtime** — `next build` emits plain HTML, CSS and JS t
 
 ### Client vs server components
 
-Only three components are client components:
+Server by default. A component becomes a client component only when it needs an
+event listener, a rAF loop or other browser-only state.
 
 | Component | Why |
 | --- | --- |
 | `SiteHeader.tsx` | scroll state, scroll-spy, mobile menu |
 | `RevealObserver.tsx` | one shared `IntersectionObserver` for the whole page |
+| `Cursor.tsx` | pointer tracking + rAF |
+| `PhysicsField.tsx` | canvas 2D + rAF |
+| `ParallaxLayers.tsx` | pointer parallax + rAF |
+| `TiltCard.tsx` | per-card pointer events + an idle-terminating rAF loop |
 | — | everything else is a server component |
 
 `Reveal.tsx` is a **server** component on purpose. It renders a plain
 `<div data-reveal>` and nothing else; the animation is armed from CSS. This is
 deliberate — see the content-visibility rule below.
+
+`TiltCard` is a client component that takes `children`, so server-rendered cards
+pass straight through it without becoming client components themselves.
+
+### Motion layer
+
+`src/lib/motion.ts` holds every shared primitive: `clamp`, `lerp`, `damp`
+(frame-rate independent smoothing), the `prefersReducedMotion()` and
+`hasFinePointer()` probes, and a single module-level `pointer` store.
+
+Two rules keep it cheap, and both are load-bearing:
+
+- **One set of listeners.** `attachPointerTracking()` is idempotent, so the
+  cursor, the tilt cards and the particle canvas read the same pointer state
+  instead of each attaching their own handlers.
+- **The rAF loops write `transform` directly.** Driving this through React state
+  would re-render on every frame. Where a CSS keyframe animation also applies to
+  the same element (the backdrop blobs), the transform goes on a wrapper so the
+  two do not fight over one property.
+
+The whole layer is CSS 3D, a 2D canvas and `requestAnimationFrame` — no
+dependency, which is why it can be dropped without touching the build.
 
 ### Content-visibility rule
 
