@@ -130,10 +130,18 @@ Do not reintroduce `useState`-driven hiding in `Reveal`. It caused a blank page.
 npm run dev             # dev server
 npm run build           # static export -> ./out
 npm run lint            # ESLint
-npm run typecheck       # tsc --noEmit
+npm run typegen         # write .next/types (route types) without a full build
+npm run typecheck       # next typegen && tsc --noEmit
 npm run agents:sync     # regenerate agents/ from src/lib/content.ts
 npm run agents:check    # fail if agent docs are stale
 ```
+
+**`typecheck` runs `next typegen` first, and that is load-bearing.** `layout.tsx`
+is typed with the generated `LayoutProps<"/">`, which only exists once Next has
+written `.next/types`. Neither `.next/` nor `next-env.d.ts` is committed, so on a
+clean checkout a bare `tsc --noEmit` fails with `Cannot find name 'LayoutProps'`.
+Folding the generator into the script fixes that once for both `ci.yml` and a
+fresh local clone, instead of depending on step order in a workflow.
 
 ## CI/CD pipeline
 

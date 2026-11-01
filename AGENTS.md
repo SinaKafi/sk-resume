@@ -48,7 +48,8 @@ link resolves, every document is reachable from here.
 npm run dev           # dev server              → http://localhost:3000
 npm run build         # static export           → ./out
 npm run lint          # ESLint
-npm run typecheck     # tsc --noEmit
+npm run typegen       # write .next/types without a full build
+npm run typecheck     # next typegen && tsc --noEmit (typegen is required — see architecture.md)
 npm run agents:sync   # regenerate agents/ from src/lib/content.ts
 npm run agents:check  # fail if agent docs are stale or the link graph breaks
 ```

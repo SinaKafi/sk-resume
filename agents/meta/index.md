@@ -20,7 +20,7 @@ document drifted from what the generator produces.
 | File | Content hash | Origin |
 | --- | --- | --- |
 | [`README.md`](../README.md) | `1ea2bd270a72` | manual |
-| [`architecture.md`](../architecture.md) | `9765d1d67bdc` | manual |
+| [`architecture.md`](../architecture.md) | `01d5ef049038` | manual |
 | [`business.md`](../business.md) | `26717ae2e99c` | generated |
 | [`content.md`](../content.md) | `3c449bc45a58` | manual |
 | [`design.md`](../design.md) | `e796a59cce34` | manual |
