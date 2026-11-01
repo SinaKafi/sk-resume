@@ -14,7 +14,7 @@ statically exported and deployed to **GitHub Pages** by a GitHub Actions workflo
 | Framework | Next.js 16 (App Router, static export) |
 | UI | React 19 + TypeScript |
 | Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) |
-| Motion | CSS + `IntersectionObserver` (no animation library) |
+| Motion | CSS + `IntersectionObserver` + canvas 2D (no animation library) |
 | Icons | Inline SVG components (no icon package) |
 | Hosting | GitHub Pages via `actions/deploy-pages` |
 
@@ -155,8 +155,10 @@ The workflow at `.github/workflows/deploy.yml` builds and publishes the site on
 every push to `main`. A second workflow, `.github/workflows/ci.yml`, runs lint,
 typecheck and a build on pull requests and feature branches.
 
-**One-time setup:** in the repository, go to **Settings → Pages** and set
-**Source** to **GitHub Actions**.
+**No one-time setup needed.** The `Configure Pages` step passes
+`enablement: true`, so the first run on a repository that has never had Pages
+switched on creates the site itself rather than failing with a 404. If you would
+rather do it by hand, **Settings → Pages → Source** → **GitHub Actions**.
 
 ### Base path
 
@@ -201,6 +203,10 @@ src/
     icon.svg                   # favicon
   components/
     Backdrop.tsx               # fixed aurora/grid/grain background
+    ParallaxLayers.tsx         # depths the blobs react to the pointer at
+    Cursor.tsx                 # pointer aura + lagging ring
+    PhysicsField.tsx           # canvas 2D particle field with gravity
+    TiltCard.tsx               # CSS 3D tilt + pointer-tracking specular
     SiteHeader.tsx             # sticky glass nav + scroll spy + mobile sheet
     Hero.tsx                   # name, tagline, CTAs, stat tiles
     About.tsx                  # profile summary + focus areas
@@ -209,9 +215,12 @@ src/
     Skills.tsx                 # grouped skill chips
     Contact.tsx                # contact panel + footer
     Section.tsx                # shared section shell
-    Reveal.tsx                 # IntersectionObserver scroll reveal
+    Reveal.tsx                 # the block a scroll-reveal wraps
+    RevealObserver.tsx         # IntersectionObserver that arms the reveals
     Icon.tsx                   # inline SVG icon set
-  lib/content.ts               # ← all site copy lives here
+  lib/
+    content.ts                 # ← all site copy lives here
+    motion.ts                  # shared motion helpers, reduced-motion aware
 ```
 
 ---

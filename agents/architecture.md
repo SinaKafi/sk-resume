@@ -161,6 +161,10 @@ that token do not trigger further workflow runs — so there is no loop, and no
 
 ## Deployment
 
-Set **Settings → Pages → Source → GitHub Actions** once. The base path is
-auto-detected, so the same source works for a project site (`/<repo>`), a user
-site (`""`) and a custom domain (`""`).
+`deploy.yml` turns Pages on by itself: the `Configure Pages` step passes
+`enablement: true`, so the first run on a repo that has never had Pages creates
+the site instead of failing with a 404 from `GET /repos/{owner}/{repo}/pages`.
+The manual equivalent, if that ever has to be done by hand, is
+**Settings → Pages → Source → GitHub Actions**. The base path is auto-detected,
+so the same source works for a project site (`/<repo>`), a user site (`""`) and
+a custom domain (`""`).
