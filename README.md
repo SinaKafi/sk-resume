@@ -155,10 +155,16 @@ The workflow at `.github/workflows/deploy.yml` builds and publishes the site on
 every push to `main`. A second workflow, `.github/workflows/ci.yml`, runs lint,
 typecheck and a build on pull requests and feature branches.
 
-**No one-time setup needed.** The `Configure Pages` step passes
-`enablement: true`, so the first run on a repository that has never had Pages
-switched on creates the site itself rather than failing with a 404. If you would
-rather do it by hand, **Settings → Pages → Source** → **GitHub Actions**.
+**One-time setup:** in the repository, go to **Settings → Pages** and set
+**Source** to **GitHub Actions**. This cannot be automated from the workflow:
+creating a Pages site needs repo-admin rights, and the workflow's `GITHUB_TOKEN`
+only carries `pages: write`, which authorises deploying to an existing site, not
+creating one. `actions/configure-pages` therefore fails with *Resource not
+accessible by integration* if Pages has never been switched on for the repo.
+
+Until that toggle is flipped, `deploy.yml` fails at the `Configure Pages` step
+and every later step is skipped — a red X with nothing built, rather than a
+broken site.
 
 ### Base path
 

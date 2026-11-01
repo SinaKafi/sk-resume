@@ -161,10 +161,16 @@ that token do not trigger further workflow runs — so there is no loop, and no
 
 ## Deployment
 
-`deploy.yml` turns Pages on by itself: the `Configure Pages` step passes
-`enablement: true`, so the first run on a repo that has never had Pages creates
-the site instead of failing with a 404 from `GET /repos/{owner}/{repo}/pages`.
-The manual equivalent, if that ever has to be done by hand, is
-**Settings → Pages → Source → GitHub Actions**. The base path is auto-detected,
-so the same source works for a project site (`/<repo>`), a user site (`""`) and
-a custom domain (`""`).
+Set **Settings → Pages → Source → GitHub Actions** once, by hand. The base path
+is auto-detected, so the same source works for a project site (`/<repo>`), a user
+site (`""`) and a custom domain (`""`).
+
+That toggle is not automatable from the workflow, and this trips people up:
+creating a Pages site is a repo-admin operation, while the workflow's
+`GITHUB_TOKEN` carries only the `pages: write` permission, which authorises
+*deploying* to a site that already exists. So `actions/configure-pages` fails
+with **Resource not accessible by integration** on its `POST /pages` call if
+Pages has never been enabled — and setting `enablement: true` on the action does
+not help, because that is exactly the call it attempts. `Configure Pages` also
+runs first, so this failure takes the whole run with it: the remaining steps are
+skipped, and the result is a red X with nothing built rather than a broken site.
