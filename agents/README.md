@@ -23,7 +23,7 @@ The root entry point for the whole repository is [`AGENTS.md`](../AGENTS.md).
 | [architecture.md](./architecture.md) | Repo map, rendering model, conventions, deploy pipeline | manual |
 | [design.md](./design.md) | Glass design system: tokens, utilities, rules | manual |
 | [content.md](./content.md) | Raw resume copy — the upstream human source | manual |
-| [meta/index.md](./meta/index.md) | Manifest: content hashes + link-graph status | generated |
+| [meta/index.md](./meta/index.md) | Manifest: every document's content hash and origin | generated |
 
 ## Recursive structure
 
