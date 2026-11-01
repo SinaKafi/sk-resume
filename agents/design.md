@@ -65,9 +65,19 @@ available as ordinary Tailwind utilities: `bg-iris-500`, `text-aqua-400`,
 - Reveal-on-scroll via the shared `IntersectionObserver` in `RevealObserver.tsx`.
   Stagger via `delay` on `Reveal`, capped in practice around 200ms.
 - Background blobs drift on 26s and 38s loops — slow enough to read as ambient.
+- An ambient WebGL particle field (`MotionScene.tsx`) sits between the backdrop
+  and the panes: additive-glow points, one accent-family palette, spread so the
+  centre of the frame stays the calmest part. The pointer acts as a gravity
+  well — a softened inverse-square pull against a spring back home — so the
+  field sloshes and settles. Keep it *quiet*: it is a backdrop, and anything
+  denser or brighter than a faint starfield fights the prose.
+- The cursor (`CursorGlow.tsx`) is a dot with a lagging ring that opens on
+  interactive elements. It is opt-in — fine pointers only, never under reduced
+  motion — and it hides the native cursor only once it has armed.
 - **`prefers-reduced-motion` must fully disable motion**, including stagger
-  delays. This is not optional; a surviving delay leaves blocks invisible, not
-  merely un-animated.
+  delays, the physics loop and the cursor. This is not optional; a surviving
+  delay leaves blocks invisible, not merely un-animated. The WebGL layer keeps
+  its one static frame rather than vanishing.
 - Never hide content behind an animation without a visible-by-default fallback.
 
 ## Accessibility floors
@@ -88,4 +98,6 @@ available as ordinary Tailwind utilities: `bg-iris-500`, `text-aqua-400`,
 - Do not use `backdrop-blur` on large scrolling containers; it forces a
   repaint on every frame. It belongs on fixed layers and small panes.
 - Do not introduce a component library or icon package. Icons are inline SVG in
-  `Icon.tsx` and are added by extending its `IconName` union.
+  `Icon.tsx` and are added by extending its `IconName` union. `three` and `gsap`
+  are the only sanctioned animation dependencies, and only for `MotionScene.tsx`
+  and `CursorGlow.tsx` — do not reach for them for layout or for content.

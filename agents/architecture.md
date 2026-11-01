@@ -34,6 +34,9 @@ database and no API at runtime** — `next build` emits plain HTML, CSS and JS t
 │   │   ├── globals.css        design tokens + glass utilities
 │   │   └── icon.svg           favicon
 │   ├── components/            one file per section, plus shared primitives
+│   │   ├── MotionScene.tsx    client — ambient WebGL particle field
+│   │   ├── CursorGlow.tsx     client — GSAP dot + trailing ring cursor
+│   │   └── ...                sections, Reveal, RevealObserver, SiteHeader
 │   └── lib/content.ts         ALL site copy — the single source of truth
 ├── next.config.ts             output: "export", env-driven basePath
 └── postcss.config.mjs         Tailwind v4
@@ -51,13 +54,43 @@ database and no API at runtime** — `next build` emits plain HTML, CSS and JS t
 
 ### Client vs server components
 
-Only three components are client components:
+Only five components are client components:
 
 | Component | Why |
 | --- | --- |
 | `SiteHeader.tsx` | scroll state, scroll-spy, mobile menu |
 | `RevealObserver.tsx` | one shared `IntersectionObserver` for the whole page |
+| `MotionScene.tsx` | WebGL particle field (`three` + `gsap`) |
+| `CursorGlow.tsx` | pointer-following cursor (`gsap`) |
 | — | everything else is a server component |
+
+### Motion layers
+
+`MotionScene` and `CursorGlow` are the only GPU-adjacent code in the repo. Both
+are mounted from `page.tsx` and both are pure decoration — every exit below
+leaves the page complete and readable:
+
+| Condition | `MotionScene` | `CursorGlow` |
+| --- | --- | --- |
+| no WebGL | nothing is mounted; the CSS backdrop is unchanged | unaffected (DOM + GSAP) |
+| no JavaScript | nothing is mounted | nothing is mounted; native cursor |
+| coarse pointer | mounted (field still renders) | not mounted; native cursor |
+| `prefers-reduced-motion` | one static frame, no pointer input, no ticker | not mounted; native cursor |
+
+Two details worth keeping:
+
+- `MotionScene` **probes for a WebGL context itself** and only then hands the
+  canvas to `THREE.WebGLRenderer`. Constructing the renderer first logs a
+  context-creation error on its way to throwing, which is noise for a layer
+  that is allowed to be absent.
+- `CursorGlow` hides the native cursor only by adding `html.cursor-glow`, and
+  only after it has armed. With JavaScript off the class is never added, so the
+  native cursor is never suppressed without a replacement being drawn.
+
+The field is simulated on the CPU in a single `Float32Array` per attribute and
+uploaded per frame; the render loop rides `gsap.ticker` so easing and physics
+share one `requestAnimationFrame`. Particles are pulled toward the pointer with
+a softened inverse-square term and pulled back to their home slot by a spring.
 
 `Reveal.tsx` is a **server** component on purpose. It renders a plain
 `<div data-reveal>` and nothing else; the animation is armed from CSS. This is

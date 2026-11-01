@@ -39,8 +39,17 @@ link resolves, every document is reachable from here.
 5. **Never hide content behind JavaScript.** Anything that starts hidden must be
    visible by default and revealed by progressive enhancement, with a
    `prefers-reduced-motion` path that disables motion *including delays*.
-6. **No new dependencies without a reason.** This repo deliberately ships with
-   no icon package, no animation library and no component library.
+6. **No new dependencies without a reason.** The repo still ships with no icon
+   package and no component library — icons are inline SVG in `Icon.tsx`. The
+   deliberate exception is the decorative motion layer: `three` and `gsap` back
+   [`MotionScene.tsx`](./src/components/MotionScene.tsx) and
+   [`CursorGlow.tsx`](./src/components/CursorGlow.tsx). Anything beyond those
+   two needs a reason recorded in the PR.
+7. **The 3D and cursor layers are decoration, never structure.** Both are
+   `aria-hidden` and `pointer-events-none`, and both bow out — to a static
+   frame, or to nothing at all — without WebGL, without JavaScript, on a coarse
+   pointer, and under `prefers-reduced-motion`. No content may depend on either
+   one. See [`agents/design.md`](./agents/design.md).
 
 ## Commands
 

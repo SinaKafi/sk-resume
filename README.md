@@ -14,12 +14,15 @@ statically exported and deployed to **GitHub Pages** by a GitHub Actions workflo
 | Framework | Next.js 16 (App Router, static export) |
 | UI | React 19 + TypeScript |
 | Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) |
-| Motion | CSS + `IntersectionObserver` (no animation library) |
+| Motion | CSS + `IntersectionObserver` for reveals; WebGL particle field (`three`) + cursor and easing (`gsap`) for ambient decoration |
 | Icons | Inline SVG components (no icon package) |
 | Hosting | GitHub Pages via `actions/deploy-pages` |
 
 Everything is prerendered to plain HTML/CSS/JS in `out/` — no server, no runtime
-dependencies, no external requests beyond the self-hosted font files.
+dependencies, no external requests beyond the self-hosted font files. The WebGL
+field and the custom cursor are decoration: both degrade to a static frame or to
+nothing when WebGL is missing, when JavaScript is off, on touch pointers, and
+under `prefers-reduced-motion`.
 
 ---
 
