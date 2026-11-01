@@ -38,7 +38,8 @@ Other scripts:
 ```bash
 npm run build         # static export -> ./out
 npm run lint          # ESLint
-npm run typecheck     # tsc --noEmit
+npm run typegen       # write .next/types without a full build
+npm run typecheck     # next typegen && tsc --noEmit
 npm run agents:sync   # regenerate agents/ from src/lib/content.ts
 npm run agents:check  # fail if agent docs are stale
 npm run start         # serve the exported ./out folder locally

@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "npx serve out",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typegen": "next typegen",
+    "typecheck": "next typegen && tsc --noEmit",
     "agents:sync": "node scripts/sync-agents.mjs",
     "agents:check": "node scripts/sync-agents.mjs --check"
   },
