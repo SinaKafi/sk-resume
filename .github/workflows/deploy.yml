@@ -36,9 +36,17 @@ jobs:
 
       # Must run before the build: it exposes `base_path`, which the build
       # needs so assets resolve correctly on project pages.
+      #
+      # `enablement: true` creates the Pages site if it does not exist yet.
+      # Without it the step calls GET /repos/{owner}/{repo}/pages against a repo
+      # that has never had Pages switched on, gets a 404 and fails the whole
+      # run. Enabling it here means a fresh clone of this repo deploys with no
+      # manual trip through Settings → Pages.
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Lint
         run: npm run lint
