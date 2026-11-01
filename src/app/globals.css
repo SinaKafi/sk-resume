@@ -176,6 +176,17 @@
     border-radius: 0.5rem;
   }
 
+  /*
+   * The custom cursor hides the native one — but only once `CursorGlow` has
+   * armed itself and added this class, and only where a fine pointer exists.
+   * No JavaScript (or a reduced-motion visitor) means no class, so the native
+   * cursor is never suppressed without a replacement being drawn.
+   */
+  html.cursor-glow,
+  html.cursor-glow * {
+    cursor: none;
+  }
+
   /* Subtle scrollbar that matches the dark glass surface. */
   * {
     scrollbar-width: thin;
