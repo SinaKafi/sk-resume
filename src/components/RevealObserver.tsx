@@ -38,18 +38,39 @@ export function RevealObserver() {
       return;
     }
 
+    const reveal = (element: HTMLElement) => {
+      element.setAttribute("data-revealed", "");
+      observer.unobserve(element);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          entry.target.setAttribute("data-revealed", "");
-          observer.unobserve(entry.target);
+          reveal(entry.target as HTMLElement);
         }
       },
       { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
     );
 
     elements.forEach((element) => observer.observe(element));
+
+    /*
+     * Belt and braces: the observer only reports threshold crossings, and an
+     * element taller than ten times the (shrunk) root can never reach its
+     * `threshold`. Anything already on screen at mount is revealed directly so
+     * it cannot be stranded at `opacity: 0`. Same boundary the observer uses,
+     * so this is a no-op wherever the observer already fires.
+     */
+    requestAnimationFrame(() => {
+      const limit = window.innerHeight * 0.9;
+      for (const element of elements) {
+        if (element.hasAttribute("data-revealed")) continue;
+        const rect = element.getBoundingClientRect();
+        if (rect.top < limit && rect.bottom > 0) reveal(element);
+      }
+    });
+
     return () => observer.disconnect();
   }, []);
 

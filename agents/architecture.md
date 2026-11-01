@@ -76,6 +76,11 @@ This is a hard rule, learned from a real bug:
   page still appears.
 - `prefers-reduced-motion` zeroes transition **delays** as well as durations —
   a leftover delay leaves blocks stuck at `opacity: 0`.
+- `RevealObserver` also reveals anything already on screen when it mounts. The
+  observer only reports threshold crossings, and a block that straddles the fold
+  at load can sit below its `0.1` threshold and so never fire — visible, but
+  stranded at `opacity: 0`. The mount-time pass uses the same `-10%` boundary the
+  observer does, so it is a no-op wherever the observer already fires.
 
 Do not reintroduce `useState`-driven hiding in `Reveal`. It caused a blank page.
 
