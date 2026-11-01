@@ -71,7 +71,7 @@ export function Contact() {
                   <Icon name="mail" className="h-4 w-4" />
                   Send an email
                 </a>
-                <a
+                {/* <a
                   href={links.website}
                   target="_blank"
                   rel="noreferrer noopener"
@@ -79,7 +79,7 @@ export function Contact() {
                 >
                   <Icon name="globe" className="h-4 w-4 text-iris-300" />
                   sinakafi.com
-                </a>
+                </a> */}
               </div>
 
               <dl className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
